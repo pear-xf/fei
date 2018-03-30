@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>百度语音合成接口</title>
+    <meta name="keywords" content="关键字" />
+    <meta name="description" content="描述" />
+</head>
+<body>
+    <script type="text/javascript">
+(function(a) {
+    var _debug = function(s) {
+        console.log(s);
+    };
+    var _v = null;
+    var playarr = [];
+    var _cur = null;
+    var _timeid = 0;
+    a.bobao = {
+        /**
+         * 添加播放文本
+         * @param {[type]} t    文本
+         * @param {[type]} func 播放完成后的回调
+         */
+        addText: function(t, func) {
+            playarr.push({
+                text: t,
+                callback: func
+            });
+            _timeid || this.start();
+        },
+        playEnd: function() {
+            if (_cur) {
+                'function' == typeof(_cur.callback) && _cur.callback();
+                _cur = null;
+            }
+        },
+        start: function() {
+            var _t = this;
+            _timeid = setInterval(function() {
+                _v || _t.initVideo();
+                if (_v.paused) {
+                    _cur || (_cur = playarr.shift());
+                    if (_cur) {
+                        _v.src = "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&source=web&text=" + encodeURI(_cur.text);
+                        _v.play();
+                    } else {
+                        clearInterval(_timeid);
+                        _timeid = 0;
+                    }
+                }
+            }, 2000);
+        },
+        initVideo: function() {
+            var _t = this;
+            _v = document.createElement('video');
+            _v.addEventListener('ended', function() {
+                _t.playEnd();
+            });
+            _v.addEventListener('error', function() {
+                _debug(_cur);
+                _v.pause();
+            });
+        }
+    };
+})(window);
+//使用方法
+bobao.addText('这是第一个语音播报 ', function() {
+    console.log('第一个结束啦');
+});
+bobao.addText('本博客有帮助你解决你的问题吗?', function() {
+    console.log('第二个结束啦');
+});
+bobao.addText('想添加更多语音请直接用本行代码添加文字', function() {
+    console.log('第三个结束啦');
+});
+bobao.addText('再次添加一个图片，并设置动画效果（在布局页面，可以进行组件的命名，如下图）：点击播放可以预览效果，也可以点击预览按钮，在手机端进行扫码查看', function() {
+    console.log('第三个结束啦');
+});
+    </script>
+</body>
+</html>
