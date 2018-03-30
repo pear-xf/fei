@@ -1,0 +1,88 @@
+<!--<audio src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=谢飞" autoplay="true" controls="controls">
+Your browser does not support the audio tag.
+</audio>-->
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+
+</head>
+<body>  
+<audio src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=谢飞" controls="controls" preload id="music1" style="display: none;">
+</audio>
+<button id="bf" onclick="bf();">播放</button>
+<button id="bfs" onclick="abf();" style="display: none;">aab</button>
+<textarea name="" id="content" rows="3" cols="50"></textarea>
+<script>
+function rbf(){
+ var audio = document.getElementById('music1'); 
+ audio.currentTime = 0;
+}
+function abf(){
+	var audio = document.getElementById('music1'); 
+     var content = document.getElementById('content'); 
+     alert(content.value.length);
+}
+function bf(){
+ var audio = document.getElementById('music1');
+ var content = document.getElementById('content'); 
+ if(audio!==null){             
+    //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+     audio.setAttribute("src","http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=4&text="+content.value);
+  if(audio.paused)                     {                 
+      audio.play();
+      var   is_playFinish = setInterval(function(){
+    					            if(audio.ended){
+    						                   
+    						                    window.clearInterval(is_playFinish);
+    						                    
+    					            }
+				            }, 10);
+  }else{
+  	
+   audio.pause();// 这个就是暂停
+  }
+ } 
+}
+   
+</script>
+<script> 
+function subString(str, len, hasDot) 
+{ 
+    var newLength = 0; 
+    var newStr = ""; 
+    var chineseRegex = /[^\x00-\xff]/g; 
+    var singleChar = ""; 
+    var strLength = str.replace(chineseRegex,"**").length; 
+    for(var i = 0;i < strLength;i++) 
+    { 
+        singleChar = str.charAt(i).toString(); 
+        if(singleChar.match(chineseRegex) != null) 
+        { 
+            newLength += 2; 
+        }     
+        else 
+        { 
+            newLength++; 
+        } 
+        if(newLength > len) 
+        { 
+            break; 
+        } 
+        newStr += singleChar; 
+    } 
+     
+    if(hasDot && strLength > len) 
+    { 
+        newStr += "..."; 
+    } 
+    return newStr; 
+} 
+//alert(subString("字符串截取测试 www.jb51.net 是一个收藏精品学习资料的网站",4)); 
+</script>
+</body>
+</html>
+<!--<video controls="" style="display: none;" autoplay="" name="media"><source src="http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=123456789" type="audio/mp3"></video>-->
